@@ -29,7 +29,7 @@ $c_id = $rs[0]["id"];
 if ($nuevaEntrada) {
     // Quieren CREAR una nueva entrada, así que es un INSERT.
     $sql = "INSERT INTO persona (nombre, apellidos, telefono, estrella, categoriaId) VALUES (?,?,?,?,?)";
-    $parametros = [$nombre, $apellido, $telefono, $estrella, $c_id];
+    $parametros = [$nombre, $apellido, $telefono, $estrella?1:0, $c_id];
 } else {
     // Quieren MODIFICAR una categoría existente y es un UPDATE.
     $sql = "UPDATE persona SET nombre=?, apellidos=?, telefono=?, estrella=?, categoriaId=? WHERE id=?";

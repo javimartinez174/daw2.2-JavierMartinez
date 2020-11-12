@@ -6,7 +6,7 @@ $conexion = obtenerPdoConexionBD();
 
 // Se recoge el parámetro "id" de la request.
 $id = (int)$_REQUEST["id"];
-//$c_id = (int)$_REQUEST["c_id"];
+$c_id = (int)$_REQUEST["c_id"];
 //$c_nombre = $_REQUEST["c_nombre"];
 
 // Si id es -1 quieren CREAR una nueva entrada ($nueva_entrada tomará true).
@@ -16,7 +16,7 @@ $nuevaEntrada = ($id == -1);
 
 
 //cogemos todos los nombres de categoría para hacer un select html
-$sql = "SELECT nombre FROM categoria ORDER BY nombre";
+$sql = "SELECT * FROM categoria ORDER BY nombre";
 $select = $conexion->prepare($sql);
 $select->execute([]); // Se añade el parámetro a la consulta preparada.
 $rsCategoria = $select->fetchAll();
@@ -93,7 +93,10 @@ if ($nuevaEntrada) { // Quieren CREAR una nueva entrada, así que no se cargan d
                 <select style='margin:10px; width:200px;' name="c_nombre">
                     <?php foreach ($rsCategoria as $fila) {
                         $nombre = $fila["nombre"];
-                        echo "<option value=\"$nombre\">$nombre</option>";
+                        if($c_id==$fila["id"])
+                            echo "<option value=\"$nombre\" selected>$nombre</option>";
+                        else
+                            echo "<option value=\"$nombre\">$nombre</option>";
                     } ?>
                 </select>
         </li>

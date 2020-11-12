@@ -13,13 +13,14 @@ $where = ($fav)?"WHERE p.estrella":""; //WHERE para hacer SELECT con personas fa
 
         $sql = "
                SELECT
-                    p.id        AS p_id,
-                    p.nombre    AS p_nombre,
-                    p.telefono  AS p_telefono,
-                    p.apellidos AS p_apellido,
-                    p.estrella  AS p_estrella,
-                    c.id        AS c_id,
-                    c.nombre    AS c_nombre                    
+                    p.id          AS p_id,
+                    p.nombre      AS p_nombre,
+                    p.telefono    AS p_telefono,
+                    p.apellidos   AS p_apellido,
+                    p.estrella    AS p_estrella,
+                    p.categoriaId AS p_categoriaId,
+                    c.id          AS c_id,
+                    c.nombre      AS c_nombre                    
                 FROM
                    persona AS p INNER JOIN categoria AS c
                    ON p.categoriaId = c.id
