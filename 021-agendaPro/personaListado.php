@@ -3,24 +3,31 @@ require_once "_varios.php";
 
 $conexionBD = obtenerPdoConexionBD();
 
+if(isset($_REQUEST["colorChange"])) { //variable para cambiar el color de la tabla
+    $colorChange = $_REQUEST["colorChange"];
+    $colorChange = ($colorChange == 1) ? true : false;
+}else
+    $colorChange=false;
+
 if(isset($_REQUEST["fav"])) { //declaramos la variable fav para la lista de personas favoritas
     $fav = $_REQUEST["fav"];
     $fav = ($fav == 1) ? true : false;
 }else
     $fav=false;
 
+
+
 $where = ($fav)?"WHERE p.estrella":""; //WHERE para hacer SELECT con personas favoritas o no
 
         $sql = "
                SELECT
-                    p.id          AS p_id,
-                    p.nombre      AS p_nombre,
-                    p.telefono    AS p_telefono,
-                    p.apellidos   AS p_apellido,
-                    p.estrella    AS p_estrella,
-                    p.categoriaId AS p_categoriaId,
-                    c.id          AS c_id,
-                    c.nombre      AS c_nombre                    
+                    p.id        AS p_id,
+                    p.nombre    AS p_nombre,
+                    p.telefono  AS p_telefono,
+                    p.apellidos AS p_apellido,
+                    p.estrella  AS p_estrella,
+                    c.id        AS c_id,
+                    c.nombre    AS c_nombre                    
                 FROM
                    persona AS p INNER JOIN categoria AS c
                    ON p.categoriaId = c.id
@@ -32,7 +39,13 @@ $select = $conexionBD->prepare($sql);
 $select->execute([]); // Array vacío porque la consulta preparada no requiere parámetros.
 $rs = $select->fetchAll();
 
-
+$mayorId=0;//variable para destacar la última entrada de la agenda, que tendrá el mayor ID
+//bucle para obtener el mayorId
+if(!$fav)
+foreach ($rs as $fila) {
+    if ($fila["p_id"] > $mayorId)
+        $mayorId = $fila["p_id"];
+}
 ?>
 
 
@@ -41,6 +54,40 @@ $rs = $select->fetchAll();
 
 <head>
     <meta charset='UTF-8'>
+
+    <style>
+    <?php
+        $color1="table{ 
+                    background-color: lightcyan;
+                    }";
+        $color2="table{ 
+                    background-color: lightgreen
+                    }";
+        $color3="table{ 
+                    background-color: lightcoral
+                    }";
+        $color = rand(1,3);
+        if($colorChange)
+            switch ($color) {
+                case 1:
+                    echo $color1;
+                    break;
+                case 2:
+                    echo $color2;
+                    break;
+                case 3:
+                    echo $color3;
+                    break;
+                default:
+                    echo $color1;
+                    break;
+            }
+
+        ?>
+
+
+    </style>
+
 </head>
 
 <body>
@@ -48,7 +95,7 @@ $rs = $select->fetchAll();
 <h1>Listado de Personas</h1>
 
 
-    <table border='1'>
+    <table border='1' >
 
         <tr>
             <th>Nombre</th>
@@ -58,7 +105,13 @@ $rs = $select->fetchAll();
         </tr>
 
         <?php foreach ($rs as $fila) { ?>
-            <tr>
+            <?php
+                if($fila["p_id"]==$mayorId)
+                    echo "<tr style='background-color: yellow'>";
+                else
+                    echo "<tr>";
+            ?>
+
                 <td>
                     <p> <?=$fila["p_nombre"] ?>
                         <?php
@@ -80,6 +133,14 @@ $rs = $select->fetchAll();
 
     </table>
 
+<?php if(!$colorChange){?>
+    <a  href=   'personaListado.php?colorChange=1&fav=<?=$fav?1:0?>'><img src="img/color.png" width='100' height='100'</a>
+<?php }elseif($colorChange){?>
+    <a  href=   'personaListado.php?colorChange=0&fav=<?=$fav?1:0?>'><img src="img/color.png" width='100' height='100'</a>
+<?php }?>
+
+
+
 <br />
 <?php if(!$fav){?>
     <a href='personaListado.php?fav=1'>Ver Favoritos</a>
@@ -90,7 +151,7 @@ $rs = $select->fetchAll();
 <br />
 <br />
 
-<a href='personaFicha.php?id=-1&c_id=-1&c_nombre=<Introduzca nombre categoría>'>Crear entrada</a>
+<a href='personaFicha.php?id=-1&c_id=-1'>Crear entrada</a>
 
 <br />
 <br />
