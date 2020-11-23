@@ -1,0 +1,108 @@
+-- phpMyAdmin SQL Dump
+-- version 5.0.2
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: localhost
+-- Tiempo de generación: 06-11-2020 a las 13:31:49
+-- Versión del servidor: 10.4.14-MariaDB
+-- Versión de PHP: 7.4.10
+
+SET FOREIGN_KEY_CHECKS=0;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Base de datos: `menuJuegoRol`
+--
+CREATE DATABASE IF NOT EXISTS `menuJuegoRol` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `menuJuegoRol`;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `region`
+--
+
+DROP TABLE IF EXISTS `region`;
+CREATE TABLE IF NOT EXISTS `region` (
+                                           `id` int(11) NOT NULL AUTO_INCREMENT,
+                                           `nombre` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+                                           PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `region`
+--
+
+INSERT INTO `region` (`id`, `nombre`) VALUES
+(1, 'Oblivion'),
+(2, 'Skyrim');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `personaje`
+--
+
+DROP TABLE IF EXISTS `personaje`;
+CREATE TABLE IF NOT EXISTS `personaje` (
+                                         `id` int(11) NOT NULL AUTO_INCREMENT,
+    									 `nombre` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+                                         `apodo` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+    									 `raza` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+    									 `clase` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+                                         `estrella` tinyint(1) NOT NULL DEFAULT 0,
+                                         `regionId` int(11) NOT NULL,
+                                         PRIMARY KEY (`id`),
+                                         KEY `fk_regionIdIdx` (`regionId`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `personaje`
+--
+
+INSERT INTO `personaje` (`id`, `nombre`, `apodo`, `raza`, `clase`, `estrella`, `regionId`) VALUES
+(1, 'Sebastian', 'Ses', 'Elfo', 'Mago', 1, 1),
+(2, 'Atriporis', 'Aris', 'Humano', 'Guerrero', 0, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `equipo`
+--
+
+DROP TABLE IF EXISTS `equipo`;
+CREATE TABLE IF NOT EXISTS `equipo` (
+                                         `id` int(11) NOT NULL AUTO_INCREMENT,
+    									 `arma` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+                                         `magia` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+    									 `armadura` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+                                         `estrella` tinyint(1) NOT NULL DEFAULT 0,
+                                         `personajeId` int(11) NOT NULL,
+                                         PRIMARY KEY (`id`),
+                                         KEY `fk_personajeIdIdx` (`personajeId`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `equipo`
+--
+
+INSERT INTO `equipo` (`id`, `arma`, `magia`, `armadura`, `estrella`, `personajeId`) VALUES
+(1, 'Espada de Endrino', 'Escarcha', 'Armadura de Hueso', 1, 1),
+(2, 'Martillo de Acero', 'Oscuridad', 'Armadura de Piel', 0, 2);
+
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `personaje`
+--
+ALTER TABLE `personaje`
+    ADD CONSTRAINT `fk_regionId` FOREIGN KEY (`regionId`) REFERENCES `region` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `equipo`
+    ADD CONSTRAINT `fk_personajeId` FOREIGN KEY (`personajeId`) REFERENCES `personaje` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+SET FOREIGN_KEY_CHECKS=1;
+COMMIT;
