@@ -3,6 +3,11 @@ require_once "_varios.php";
 
 $conexionBD = obtenerPdoConexionBD();
 
+if (!isset($_SESSION["tema"]) & !isset($_REQUEST["tema"]))
+    $_SESSION["tema"] = "";
+else if (isset($_REQUEST["tema"]))
+    $_SESSION["tema"] = $_REQUEST["tema"];
+
 // Los campos que incluyo en el SELECT son los que luego podré leer
 // con $fila["campo"].
 $sql = "SELECT id, nombre FROM categoria ORDER BY nombre";
@@ -15,12 +20,19 @@ $rs = $select->fetchAll();
 // $rs
 ?>
 
-
-
 <html>
 
 <head>
     <meta charset='UTF-8'>
+
+    <style>
+
+    body{
+        background-color: <?= $_SESSION["tema"]; ?>;
+    }
+
+    </style>
+
 </head>
 
 
@@ -28,6 +40,16 @@ $rs = $select->fetchAll();
 <body>
 
 <h1>Listado de Categorías</h1>
+
+<div>
+    <p>Temas: </p>
+    <a href='categoriaListado.php?tema=white'>Claro</a>
+    <a href='categoriaListado.php?tema=grey'>Oscuro</a>
+    <a href='categoriaListado.php?tema=lightcyan'>Pastel</a>
+    <a href='categoriaListado.php?tema=red'>Sangre</a>
+</div>
+<br>
+<br>
 
 <table border='1'>
 

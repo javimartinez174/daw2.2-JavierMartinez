@@ -3,21 +3,23 @@ require_once "_varios.php";
 
 $conexionBD = obtenerPdoConexionBD();
 
+session_start();
+
 if(isset($_REQUEST["colorChange"])) { //variable para cambiar el color de la tabla
     $colorChange = $_REQUEST["colorChange"];
     $colorChange = ($colorChange == 1) ? true : false;
 }else
     $colorChange=false;
 
-if(isset($_REQUEST["fav"])) { //declaramos la variable fav para la lista de personas favoritas
-    $fav = $_REQUEST["fav"];
-    $fav = ($fav == 1) ? true : false;
-}else
-    $fav=false;
 
+if (isset($_REQUEST["favoritos"])) {
+    $_SESSION["favoritos"] = true;
+}
+if (isset($_REQUEST["todos"])) {
+    unset($_SESSION["favoritos"]);
+}
 
-
-$where = ($fav)?"WHERE p.estrella":""; //WHERE para hacer SELECT con personas favoritas o no
+$where = isset($_SESSION["favoritos"])?"WHERE p.estrella":""; //WHERE para hacer SELECT con personas favoritas o no
 
         $sql = "
                SELECT
@@ -41,7 +43,7 @@ $rs = $select->fetchAll();
 
 $mayorId=0;//variable para destacar la última entrada de la agenda, que tendrá el mayor ID
 //bucle para obtener el mayorId
-if(!$fav)
+if(isset($_REQUEST["todos"]))
 foreach ($rs as $fila) {
     if ($fila["p_id"] > $mayorId)
         $mayorId = $fila["p_id"];
@@ -82,9 +84,11 @@ foreach ($rs as $fila) {
                     echo $color1;
                     break;
             }
-
         ?>
 
+    body{
+        background-color: ;
+    }
 
     </style>
 
@@ -93,7 +97,6 @@ foreach ($rs as $fila) {
 <body>
 
 <h1>Listado de Personas</h1>
-
 
     <table border='1' >
 
@@ -117,7 +120,7 @@ foreach ($rs as $fila) {
                         <?php
                             $urlImagen = $fila["p_estrella"] ? "img/estrellaRellena.png" : "img/estrellaVacia.png";
                         ?>
-                    <a href='personaEstablecerEstadoEstrella.php?id=<?=$fila["p_id"]?>&fav=<?=$fav?1:0?>'><img src=<?=$urlImagen?> width='16' height='16'></a>
+                    <a href='personaEstablecerEstadoEstrella.php?id=<?=$fila["p_id"]?>'><img src=<?=$urlImagen?> width='16' height='16'></a>
                     </p>
                 </td>
                 <td><p> <?=$fila["p_apellido"]?>                                                                                                            </p></td>
@@ -131,18 +134,18 @@ foreach ($rs as $fila) {
     </table>
 
 <?php if(!$colorChange){?>
-    <a  href=   'personaListado.php?colorChange=1&fav=<?=$fav?1:0?>'><img src="img/color.png" width='100' height='100'</a>
+    <a  href=   'personaListado.php?colorChange=1'><img src="img/color.png" width='100' height='100'</a>
 <?php }elseif($colorChange){?>
-    <a  href=   'personaListado.php?colorChange=0&fav=<?=$fav?1:0?>'><img src="img/color.png" width='100' height='100'</a>
+    <a  href=   'personaListado.php?colorChange=0'><img src="img/color.png" width='100' height='100'</a>
 <?php }?>
 
 
 
 <br />
-<?php if(!$fav){?>
-    <a href='personaListado.php?fav=1'>Ver Favoritos</a>
-<?php }elseif($fav){?>
-    <a href='personaListado.php?fav=0'>Ver Todos</a>
+<?php if(!isset($_SESSION["favoritos"])){?>
+    <a href='personaListado.php?favoritos'>Ver Favoritos</a>
+<?php }else{?>
+    <a href='personaListado.php?todos'>Ver Todos</a>
 <?php }?>
 
 <br />
