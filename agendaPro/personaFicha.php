@@ -4,6 +4,11 @@ require_once "_varios.php";
 
 $conexion = obtenerPdoConexionBD();
 
+session_start();
+
+if (isset($_REQUEST[$_SESSION["tema"]]))
+    $_SESSION["tema"] = $_REQUEST["tema"];
+
 // Se recoge el parámetro "id" de la request.
 $id = (int)$_REQUEST["id"];
 $c_id = (int)$_REQUEST["c_id"];
@@ -60,6 +65,11 @@ if ($nuevaEntrada) { // Quieren CREAR una nueva entrada, así que no se cargan d
 
 <head>
     <meta charset='UTF-8'>
+<style>
+    body{
+        background-color: <?= $_SESSION["tema"]; ?>;
+    }
+</style>
 </head>
 
 <body>

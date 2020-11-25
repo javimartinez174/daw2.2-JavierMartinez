@@ -5,6 +5,10 @@ $conexionBD = obtenerPdoConexionBD();
 
 session_start();
 
+if (isset($_REQUEST[$_SESSION["tema"]]))
+    $_SESSION["tema"] = $_REQUEST["tema"];
+
+
 if(isset($_REQUEST["colorChange"])) { //variable para cambiar el color de la tabla
     $colorChange = $_REQUEST["colorChange"];
     $colorChange = ($colorChange == 1) ? true : false;
@@ -87,7 +91,7 @@ foreach ($rs as $fila) {
         ?>
 
     body{
-        background-color: ;
+        background-color: <?= $_SESSION["tema"]; ?>;
     }
 
     </style>
@@ -151,7 +155,7 @@ foreach ($rs as $fila) {
 <br />
 <br />
 
-<a href='personaFicha.php?id=-1&c_id=-1'>Crear entrada</a>
+<a href='personaFicha.php?id=-1&c_id=-1&tema'>Crear entrada</a>
 
 <br />
 <br />

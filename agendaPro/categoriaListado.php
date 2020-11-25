@@ -3,6 +3,8 @@ require_once "_varios.php";
 
 $conexionBD = obtenerPdoConexionBD();
 
+session_start();
+
 if (!isset($_SESSION["tema"]) & !isset($_REQUEST["tema"]))
     $_SESSION["tema"] = "";
 else if (isset($_REQUEST["tema"]))
@@ -29,6 +31,7 @@ $rs = $select->fetchAll();
 
     body{
         background-color: <?= $_SESSION["tema"]; ?>;
+
     }
 
     </style>
@@ -73,7 +76,7 @@ $rs = $select->fetchAll();
 <br />
 <br />
 
-<a href='personaListado.php'>Gestionar listado de Personas</a>
+<a href='personaListado.php?tema'>Gestionar listado de Personas</a>
 
 </body>
 </html>
