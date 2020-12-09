@@ -1,9 +1,8 @@
 <?php
 
 require_once "_Varios.php";
-
-$nombre = $_REQUEST["nombre"];
-$id     = (int)$_REQUEST["id"];
+$nombre = $_SESSION["nombre"];
+$apellido = $_SESSION["apellido"];
 
 // TODO Hay que comprobar si hay sesión-usuario iniciada.
 //   - Si la hay, no intervenimos. Dejamos que la pág se cargue.
@@ -31,8 +30,8 @@ if (!haySesionIniciada()) {
 <body>
 
 <header>
-    <p>Has iniciado sesión <?=$nombre?></p>
-    <a href="SesionCerrar.php?id=<?=$id?>">Cerrar Sesión</a>
+    <p>Has iniciado sesión <?=$nombre?> <?=$apellido?></p>
+    <a href="SesionCerrar.php">Cerrar Sesión</a>
     <h1>Contenido Privado 1</h1>
 </header>
 

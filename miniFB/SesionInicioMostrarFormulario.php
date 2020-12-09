@@ -21,7 +21,7 @@
     <input type="text" id="identificador"  name="identificador"><br><br>
 
     <label for="contrasenna">Contraseña: </label>
-    <input type="password" id="conrasenna" name= "contrasenna"><br><br>
+    <input type="password" id="contrasenna" name= "contrasenna"><br><br>
 
     <input type="submit" value="Entrar" name="entrar">
 </form>

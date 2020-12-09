@@ -1,5 +1,7 @@
 <?php
 
+require_once "_Varios.php";
+
 // TODO: En esta página, si hay sesión iniciada, mostrar la info y si no poner un link para iniciar sesión,
 // pero cualquiera puede verla, tenga sesión iniciada o no.
 

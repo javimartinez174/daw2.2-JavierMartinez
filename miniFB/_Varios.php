@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-session_start();
 
 function obtenerPdoConexionBD(): PDO
 {
@@ -26,23 +25,27 @@ function obtenerPdoConexionBD(): PDO
     return $conexion;
 }
 
-function obtenerUsuario(string $identificador, string $contrasenna): array
+function obtenerUsuario(string $identificador, string $contrasenna): ?array
 {
     // TODO Pendiente hacer.
 
-    $sql = "SELECT * FROM Usuario WHERE identificador=? AND contrasenna=?";
+    $sql = "SELECT * FROM usuario WHERE identificador=? AND contrasenna=?";
 
     $select = obtenerPdoConexionBD()->prepare($sql);
     $select->execute([$identificador,$contrasenna]);
     $rs = $select->fetchAll();
 
-
-    return $rs;
+    return $select->rowCount()==1 ? $rs[0] : null;
 }
 
-function marcarSesionComoIniciada(/*array $arrayUsuario*/ string $id)
+function marcarSesionComoIniciada(array $arrayUsuario)
 {
-    $_SESSION["$id"]=true;
+    session_start();
+    //$_SESSION[$arrayUsuario["id"]]=true;
+    $_SESSION["id"]=$arrayUsuario["id"];
+    $_SESSION["identificador"]=$arrayUsuario["identificador"];
+    $_SESSION["nombre"]=$arrayUsuario["nombre"];
+    $_SESSION["apellido"]=$arrayUsuario["apellido"];
 
     // TODO Anotar en el post-it todos estos datos:
     // $_SESSION["id"] = ...
@@ -52,7 +55,7 @@ function marcarSesionComoIniciada(/*array $arrayUsuario*/ string $id)
 
 function haySesionIniciada(): bool
 {
-    return isset($_SESSION["id"]);
+    return isset($_SESSION);
 
 
 
@@ -67,7 +70,7 @@ function cerrarSesion(string $id)
 {
     // TODO session_destroy() y unset de $_SESSION (por si acaso).
     session_destroy();
-    unset($_SESSION["$id"]);
+    unset($_SESSION);
 }
 
 // (Esta función no se utiliza en este proyecto pero se deja por si se optimizase el flujo de navegación.)
