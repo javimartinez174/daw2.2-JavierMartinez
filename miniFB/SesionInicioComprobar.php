@@ -7,7 +7,7 @@ $contrasenna   = $_REQUEST["contrasenna"];
 
 $arrayUsuario = obtenerUsuario($identificador, $contrasenna);
 
-if ($arrayUsuario != null) {
+if ($arrayUsuario) {
     marcarSesionComoIniciada($arrayUsuario);
     redireccionar("ContenidoPrivado1.php");
 } else
@@ -17,7 +17,7 @@ if ($arrayUsuario != null) {
 
 // TODO Verificar (usar funciones de _Varios.php) identificador y contrasenna recibidos y redirigir a ContenidoPrivado1 (si OK) o a iniciar sesión (si NO ok).
 
-$arrayUsuario = obtenerUsuario($identificador, $contrasenna);
+/*$arrayUsuario = obtenerUsuario($identificador, $contrasenna);
 
 if ($arrayUsuario) { // HAN venido datos: identificador existía y contraseña era correcta.
     // TODO Llamar a marcarSesionComoIniciada($arrayUsuario) ...
@@ -25,4 +25,4 @@ if ($arrayUsuario) { // HAN venido datos: identificador existía y contraseña e
     // TODO Redirigir.
 } else {
     // TODO Redirigir.
-}
+}*/

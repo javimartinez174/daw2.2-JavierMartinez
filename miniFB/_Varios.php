@@ -25,11 +25,12 @@ function obtenerPdoConexionBD(): PDO
     return $conexion;
 }
 
+session_start();
+
 function obtenerUsuario(string $identificador, string $contrasenna): ?array
 {
-    // TODO Pendiente hacer.
 
-    $sql = "SELECT * FROM usuario WHERE identificador=? AND contrasenna=?";
+    $sql = "SELECT * FROM Usuario WHERE identificador=? AND contrasenna=?";
 
     $select = obtenerPdoConexionBD()->prepare($sql);
     $select->execute([$identificador,$contrasenna]);
@@ -38,14 +39,29 @@ function obtenerUsuario(string $identificador, string $contrasenna): ?array
     return $select->rowCount()==1 ? $rs[0] : null;
 }
 
+function crearUsuario(array $arrayNuevoUsuario)
+{
+
+    $sql = "INSERT INTO Usuario (identificador, contrasenna, tipoUsuario, nombre, apellidos) VALUES (?,?,?,?,?)";
+
+    $select = obtenerPdoConexionBD()->prepare($sql);
+    $select->execute([$arrayNuevoUsuario[0],$arrayNuevoUsuario[1],0,$arrayNuevoUsuario[2],$arrayNuevoUsuario[3]]);
+}
+
+
 function marcarSesionComoIniciada(array $arrayUsuario)
 {
-    session_start();
+
     //$_SESSION[$arrayUsuario["id"]]=true;
     $_SESSION["id"]=$arrayUsuario["id"];
     $_SESSION["identificador"]=$arrayUsuario["identificador"];
+    $_SESSION["contrasenna"]=$arrayUsuario["contrasenna"];
+    $_SESSION["codigoCookie"]=$arrayUsuario["codigoCookie"];
+    $_SESSION["tipoUsuario"]=$arrayUsuario["tipoUsuario"];
     $_SESSION["nombre"]=$arrayUsuario["nombre"];
-    $_SESSION["apellido"]=$arrayUsuario["apellido"];
+    $_SESSION["apellidos"]=$arrayUsuario["apellidos"];
+
+
 
     // TODO Anotar en el post-it todos estos datos:
     // $_SESSION["id"] = ...
@@ -55,7 +71,12 @@ function marcarSesionComoIniciada(array $arrayUsuario)
 
 function haySesionIniciada(): bool
 {
-    return isset($_SESSION);
+    /*isset($_SESSION["id"])){
+        return true;
+    }else
+        return false;*/
+
+    return isset($_SESSION["id"]);
 
 
 
@@ -66,7 +87,7 @@ function haySesionIniciada(): bool
     //return false;
 }
 
-function cerrarSesion(string $id)
+function cerrarSesion()
 {
     // TODO session_destroy() y unset de $_SESSION (por si acaso).
     session_destroy();

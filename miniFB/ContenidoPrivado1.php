@@ -1,8 +1,6 @@
 <?php
 
 require_once "_Varios.php";
-$nombre = $_SESSION["nombre"];
-$apellido = $_SESSION["apellido"];
 
 // TODO Hay que comprobar si hay sesión-usuario iniciada.
 //   - Si la hay, no intervenimos. Dejamos que la pág se cargue.
@@ -12,12 +10,10 @@ $apellido = $_SESSION["apellido"];
 
 if (!haySesionIniciada()) {
     redireccionar("SesionInicioMostrarFormulario.php");
-    // TODO Redirigir...
 }
 
+
 ?>
-
-
 
 <html>
 
@@ -25,17 +21,13 @@ if (!haySesionIniciada()) {
     <meta charset='UTF-8'>
 </head>
 
-
-
 <body>
 
 <header>
-    <p>Has iniciado sesión <?=$nombre?> <?=$apellido?></p>
+    <p>Has iniciado sesión <?=$_SESSION["nombre"]?> <?=$_SESSION["apellidos"]?></p>
     <a href="SesionCerrar.php">Cerrar Sesión</a>
     <h1>Contenido Privado 1</h1>
 </header>
-
-
 
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer consequat leo tempor, fringilla enim non, malesuada elit. Aenean odio justo, pretium sed nunc nec, eleifend faucibus nibh. Nulla egestas ut sapien eu venenatis. Donec semper turpis eu magna aliquet, ut lobortis nunc commodo. Aliquam id felis orci. Donec hendrerit pretium malesuada. Ut ultricies mi nec ullamcorper tincidunt. Suspendisse nec efficitur nisi. Morbi consequat feugiat urna, et sodales sem sollicitudin vitae. Morbi nibh metus, aliquam ut mattis non, efficitur eget urna. Quisque sodales tempus varius.</p>
 <p>Aliquam iaculis, ex eu gravida vulputate, orci nibh elementum augue, sit amet lacinia purus quam non augue. Interdum et malesuada fames ac ante ipsum primis in faucibus. Etiam sed mi at purus ornare molestie. Praesent cursus pharetra tortor. Aliquam sit amet interdum est. Pellentesque vehicula dapibus placerat. Cras eu lorem id lectus ultricies interdum ut non mauris. Suspendisse malesuada elit id magna varius, quis ullamcorper nibh hendrerit. Fusce elit enim, ornare non ante ac, rutrum pharetra nibh.</p>

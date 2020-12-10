@@ -1,8 +1,8 @@
 <?php
 require_once "_Varios.php";
-$id=$_REQUEST["id"];
+//$id=$_REQUEST["id"];
 
-cerrarSesion($id);
+cerrarSesion();
 redireccionar("ContenidoPublico1.php");
 
 

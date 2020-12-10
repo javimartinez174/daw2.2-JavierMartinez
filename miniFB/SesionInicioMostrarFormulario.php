@@ -16,7 +16,7 @@
 
 <h1>Iniciar Sesión</h1>
 
-<form action="SesionInicioComprobar.php" method="POST">
+<form action="SesionInicioComprobar.php" method="post">
     <label for="identificador">Nombre de Usuario: </label>
     <input type="text" id="identificador"  name="identificador"><br><br>
 
@@ -25,6 +25,8 @@
 
     <input type="submit" value="Entrar" name="entrar">
 </form>
+
+<a href="CrearCuentaFormulario.php">Crear Cuenta</a>
 
 </body>
 
