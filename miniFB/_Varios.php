@@ -87,9 +87,74 @@ function haySesionIniciada(): bool
     //return false;
 }
 
+
+function intentarCanjearSesionCookie(): bool
+{
+    /*$codigoCookie = $_COOKIE["identificador"];
+
+    $sql = "SELECT * FROM Usuario WHERE identificador=? AND BINARY codigoCookie=?";
+
+    $select = obtenerPdoConexionBD()->prepare($sql);
+    $select->execute([$_COOKIE[],$_COOKIE[]]);
+    $rs = $select->fetchAll();*/
+
+
+    // TODO Comprobar si hay una "sesión-cookie" válida:
+    //   - Ver que vengan DOS cookies "identificador" y "codigoCookie".
+    //   - BD: SELECT ... WHERE identificador=? AND BINARY codigoCookie=?
+    //   - ¿Ha venido un registro? (Igual que el inicio de sesión)
+    //     · Entonces, se la canjeamos por una SESIÓN RAM INICIADA: marcarSesionComoIniciada($arrayUsuario)
+    //     · Además, RENOVAMOS (re-creamos) la cookie.
+    //   - IMPORTANTE: si las cookies NO eran válidas, tenemos que borrárselas.
+    //   - En cualquier caso, devolver true/false.
+}
+
+/*function pintarInfoSesion() {
+    if (haySesionRamIniciada()) {
+        echo "<span>Sesión iniciada por <a href='UsuarioPerfilVer.php'>$_SESSION[identificador]</a> ($_SESSION[nombre] $_SESSION[apellidos]) <a href='SesionCerrar.php'>Cerrar sesión</a></span>";
+    } else {
+        echo "<a href='SesionInicioFormulario.php'>Iniciar sesión</a>";
+    }
+}*/
+
+function generarCookieRecordar(array $arrayUsuario)
+{
+    // Creamos un código cookie muy complejo (no necesariamente único).
+    $codigoCookie = generarCadenaAleatoria(32); // Random...
+
+    $sql = "UPDATE Usuario SET codigoCookie=? WHERE identificador=? AND contrasenna=?";
+    $select = obtenerPdoConexionBD()->prepare($sql);
+    $select->execute([$codigoCookie,$arrayUsuario["identificador"],$arrayUsuario["contrasenna"]]);
+
+    setcookie($arrayUsuario["identificador"],$codigoCookie);
+
+    // TODO guardar código en BD
+
+    // TODO Para una seguridad óptima convendría anotar en la BD la fecha de caducidad de la cookie y no aceptar ninguna cookie pasada dicha fecha.
+
+    // TODO Enviamos al cliente, en forma de cookies, el identificador y el codigoCookie: setcookie(...) ...
+
+}
+
+function borrarCookieRecordar(array $arrayUsuario)
+{
+
+    setcookie($arrayUsuario["codigoCookie"],$arrayUsuario["identificador"],time()-10);
+
+    // TODO Eliminar el código cookie de nuestra BD.
+
+    // TODO Pedir borrar cookie (setcookie con tiempo time() - negativo...)
+}
+
+function generarCadenaAleatoria(int $longitud): string
+{
+    for ($s = '', $i = 0, $z = strlen($a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')-1; $i != $longitud; $x = rand(0,$z), $s .= $a[$x], $i++);
+    return $s;
+}
+
+
 function cerrarSesion()
 {
-    // TODO session_destroy() y unset de $_SESSION (por si acaso).
     session_destroy();
     unset($_SESSION);
 }
