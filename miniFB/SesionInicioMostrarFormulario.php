@@ -1,5 +1,6 @@
 <?php
-
+echo $_COOKIE["identificador"];
+echo $_COOKIE["codigoCookie"];
 ?>
 
 

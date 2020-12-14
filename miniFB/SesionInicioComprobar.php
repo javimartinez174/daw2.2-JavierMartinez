@@ -8,9 +8,8 @@ $contrasenna   = $_REQUEST["contrasenna"];
 $arrayUsuario = obtenerUsuario($identificador, $contrasenna);
 
 if ($arrayUsuario) {
+    marcarSesionComoIniciada($arrayUsuario);
     generarCookieRecordar($arrayUsuario);
-    intentarCanjearSesionCookie();
-   //marcarSesionComoIniciada($arrayUsuario);
     redireccionar("ContenidoPrivado1.php");
 } else
     redireccionar("SesionInicioMostrarFormulario.php");

@@ -27,7 +27,7 @@ function obtenerPdoConexionBD(): PDO
 
 session_start();
 
-function obtenerUsuario(string $identificador, string $contrasenna): ?array
+function obtenerUsuario(string $identificador, string $contrasenna): ? array
 {
 
     $sql = "SELECT * FROM Usuario WHERE identificador=? AND contrasenna=?";
@@ -90,13 +90,22 @@ function haySesionIniciada(): bool
 
 function intentarCanjearSesionCookie(): bool
 {
-    /*$codigoCookie = $_COOKIE["identificador"];
+    if(!isset($_COOKIE["codigoCookie"]) || !isset($_COOKIE["identificador"]))
+        return false;
 
-    $sql = "SELECT * FROM Usuario WHERE identificador=? AND BINARY codigoCookie=?";
+    $codigoCookie = $_COOKIE["codigoCookie"];
+    $identificador = $_COOKIE["identificador"];
+
+    $sql = "SELECT * FROM Usuario WHERE identificador=? AND codigoCookie=?";
 
     $select = obtenerPdoConexionBD()->prepare($sql);
-    $select->execute([$_COOKIE[],$_COOKIE[]]);
-    $rs = $select->fetchAll();*/
+    $select->execute([$identificador,$codigoCookie]);
+    //$rs = $select->fetchAll();
+
+    if ($select->rowCount()==1)
+        return true;
+    else
+        return false;
 
 
     // TODO Comprobar si hay una "sesión-cookie" válida:
@@ -122,11 +131,12 @@ function generarCookieRecordar(array $arrayUsuario)
     // Creamos un código cookie muy complejo (no necesariamente único).
     $codigoCookie = generarCadenaAleatoria(32); // Random...
 
-    $sql = "UPDATE Usuario SET codigoCookie=? WHERE identificador=? AND contrasenna=?";
+    $sql = "UPDATE Usuario SET codigoCookie=? WHERE identificador=?";
     $select = obtenerPdoConexionBD()->prepare($sql);
-    $select->execute([$codigoCookie,$arrayUsuario["identificador"],$arrayUsuario["contrasenna"]]);
+    $select->execute([$codigoCookie, $arrayUsuario["identificador"]]);
 
-    setcookie($arrayUsuario["identificador"],$codigoCookie);
+    setcookie("codigoCookie", $codigoCookie);
+    setcookie("identificador", $arrayUsuario["identificador"]);
 
     // TODO guardar código en BD
 
