@@ -89,6 +89,14 @@ class DAO
         );
     }
 
+    public static function categoriaELiminar($id)
+    {
+        self::ejecutarActualizacion(
+            "DELETE FROM categoria WHERE id=?",
+            [$id]
+        );
+    }
+
     public static function categoriaObtenerTodas(): array
     {
         $datos = [];

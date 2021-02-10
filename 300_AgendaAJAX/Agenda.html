@@ -2,35 +2,28 @@
 
 <head>
     <meta charset='UTF-8' />
-
 </head>
 
 <body>
 
 <h1>Súper Agenda FX</h1>
-
+<p id="prueba"></p>
 <h2 id='pantalla'>Categorías</h2>
-<div id="texto">
-    <h1>Colección de CDs</h1>
-    <button id="cambiaContenido">Carga Catálogo</button>
 
+<div id="texto">
+    <button id="mostrarCategorias">Cargar Categorías</button>
 </div>
 
-<div id="aqui"></div>
+<div id="tablaCategorias"></div><hr><br>
 
-<table border='1' id='tablaCategorias'>
+<div id="crearCategoria">
+    <form id="formulario">
+        <label for='nombre'>Crear categoría</label>
+        <input type='text' name='nombre' id='nombre' placeholder='<nombre de la categoría>' value='' />
+    </form>
+    <button id="submitCrearCategoria">Crear Categoria</button>
+</div>
 
-    <div id='cabeceras'>
-        <tr>
-            <th>Nombre</th>
-        </tr>
-    </div>
-
-    <div id='datos'>
-
-    </div>
-
-</table>
 <script src='js/Scripts.js'></script>
 </body>
 
