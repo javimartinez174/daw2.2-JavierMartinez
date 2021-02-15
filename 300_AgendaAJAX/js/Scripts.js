@@ -62,10 +62,10 @@ function crearTablaCategorias() { // creamos una tabla y la rellenamos con las c
     tr.setAttribute("id", "miTr");
     document.getElementById("miTabla").appendChild(tr);
 
-    var td1 = document.createElement("TH");
+    /*var td1 = document.createElement("TH");
     var text = document.createTextNode("ID");
     td1.appendChild(text);
-    document.getElementById("miTabla").appendChild(td1);
+    document.getElementById("miTabla").appendChild(td1);*/
 
     var td2 = document.createElement("TH");
     var text = document.createTextNode("NOMBRE");
@@ -77,10 +77,10 @@ function crearTablaCategorias() { // creamos una tabla y la rellenamos con las c
         tr.setAttribute("id", "miTr");
         document.getElementById("miTabla").appendChild(tr);
 
-        var td = document.createElement("TD");
+        /*var td = document.createElement("TD");
         var text = document.createTextNode(categoriasJson[i].id);
         td.appendChild(text);
-        document.getElementById("miTabla").appendChild(td);
+        document.getElementById("miTabla").appendChild(td);*/
 
         var td = document.createElement("TD");
         var a = document.createElement("a");

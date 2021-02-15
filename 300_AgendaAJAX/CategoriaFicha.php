@@ -1,45 +1,11 @@
 <?php
-	require_once "_com/Varios.php";
 
-	$conexion = obtenerPdoConexionBD();
-	
-	// Se recoge el parámetro "id" de la request.
-	$id = (int)$_REQUEST["id"];
+require_once "_com/DAO.php";
 
-	// Si id es -1 quieren CREAR una nueva entrada ($nueva_entrada tomará true).
-	// Sin embargo, si id NO es -1 quieren VER la ficha de una categoría existente
-	// (y $nueva_entrada tomará false).
-	$nuevaEntrada = ($id == -1);
+$categoriaId = $_REQUEST["id"];
+$personasCategoria = DAO::personasObtenerPorCategoria($categoriaId);
 
-	if ($nuevaEntrada) { // Quieren CREAR una nueva entrada, así que no se cargan datos.
-		$categoriaNombre = "<introduzca nombre>";
-	} else { // Quieren VER la ficha de una categoría existente, cuyos datos se cargan.
-		$sql = "SELECT nombre FROM Categoria WHERE id=?";
-
-        $select = $conexion->prepare($sql);
-        $select->execute([$id]); // Se añade el parámetro a la consulta preparada.
-        $rs = $select->fetchAll();
-		
-		 // Con esto, accedemos a los datos de la primera (y esperemos que única) fila que haya venido.
-		$categoriaNombre = $rs[0]["nombre"];
-	}
-
-
-
-    $sql = "SELECT * FROM Persona WHERE categoriaId=? ORDER BY nombre";
-
-    $select = $conexion->prepare($sql);
-    $select->execute([$id]); // Array vacío porque la consulta preparada no requiere parámetros.
-    $rsPersonasDeLaCategoria = $select->fetchAll();
-
-
-	// INTERFAZ:
-    // $nuevaEntrada
-    // $categoriaNombre
-    // $rsPersonasDeLaCategoria
 ?>
-
-
 
 <html>
 
@@ -47,56 +13,53 @@
 	<meta charset='UTF-8'>
 </head>
 
-
-
 <body>
 
-<?php if ($nuevaEntrada) { ?>
-	<h1>Nueva ficha de categoría</h1>
-<?php } else { ?>
-	<h1>Ficha de categoría</h1>
-<?php } ?>
-
-<form method='post' action='CategoriaGuardar.php'>
-
-<input type='hidden' name='id' value='<?=$id?>' />
-
-    <label for='nombre'>Nombre</label>
-	<input type='text' name='nombre' value='<?=$categoriaNombre?>' />
-    <br/>
-
-    <br/>
-
-<?php if ($nuevaEntrada) { ?>
-	<input type='submit' name='crear' value='Crear categoría' />
-<?php } else { ?>
-	<input type='submit' name='guardar' value='Guardar cambios' />
-<?php } ?>
-
-</form>
-
-<br />
-
-<p>Personas que pertenecen actualmente a la categoría:</p>
+<h2 id="titulo">Personas que pertenecen actualmente a la categoría: <?=DAO::categoriaObtenerPorId($categoriaId)->getNombre()?></h2>
 
 <ul>
 <?php
-    foreach ($rsPersonasDeLaCategoria as $fila) {
-        echo "<li>$fila[nombre] $fila[apellidos]</li>";
+    foreach ($personasCategoria as $fila) {
+        echo "<li>"."Nombre: ".$fila->getNombre()."<br>Teléfono: ".$fila->getTelefono()."</li><br>";
     }
 ?>
 </ul>
 
-<?php if (!$nuevaEntrada) { ?>
-    <br />
-    <a href='CategoriaEliminar.php?id=<?=$id?>'>Eliminar categoría</a>
-<?php } ?>
+<div id="modificarCategoria">
+    <form id="formulario">
+        <label for='nombreMod'>Modificar categoría</label>
+        <input type='text' name='nombreMod' id='nombreMod' placeholder='<nombre de la categoría>' value='' />
+        <input type='hidden' name='idMod' id='idMod' value='<?=$categoriaId?>' />
+    </form>
+    <button id="submitModificarCategoria">Modificar Categoria</button>
+</div>
 
-<br />
-<br />
+<br><br><a href="Agenda.html">¿Te redirecciono?</a>
 
-<a href='CategoriaObtenerTodas.php'>Volver al listado de categorías.</a>
+<script>
+    var categoriaNueva;
 
+    window.onload = function () {
+        submitModificarCategoria.addEventListener("click", modificarCategoria, false);
+    }
+
+    function modificarCategoria(){
+        var newCategoria = document.getElementById("nombreMod").value;
+        var newCategoriaId = document.getElementById("idMod").value;
+        if(newCategoria!="") {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    categoriaNueva = JSON.parse(this.responseText);
+                    document.getElementById("nombreMod").value = "";
+                    document.getElementById("titulo").innerHTML = "Personas que pertenecen actualmente a la categoría: "+categoriaNueva.nombre;
+                }
+            };
+            xhttp.open("GET", "CategoriaModificar.php?id=" + newCategoriaId + "&&nombre=" + newCategoria, true);
+            xhttp.send();
+        }else{}
+    }
+</script>
 </body>
 
 </html>

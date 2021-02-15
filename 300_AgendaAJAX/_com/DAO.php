@@ -92,7 +92,7 @@ class DAO
     public static function categoriaELiminar($id)
     {
         self::ejecutarActualizacion(
-            "DELETE FROM categoria WHERE id=?",
+            "DELETE FROM Categoria WHERE id=?",
             [$id]
         );
     }
@@ -109,6 +109,31 @@ class DAO
         foreach ($rs as $fila) {
             $categoria = self::categoriaCrearDesdeRs($fila);
             array_push($datos, $categoria);
+        }
+
+        return $datos;
+    }
+
+    /* PERSONA */
+
+    private static function personaCrearDesdeRs(array $fila): Persona
+    {
+        return new Persona($fila["id"], $fila["nombre"], $fila["telefono"]);
+    }
+
+
+    public static function personasObtenerPorCategoria(int $categoriaId) : array
+    {
+        $datos = [];
+
+        $rs = self::ejecutarConsulta(
+            "SELECT * FROM Persona WHERE categoriaId=?",
+            [$categoriaId]
+        );
+
+        foreach ($rs as $fila) {
+            $persona = self::personaCrearDesdeRs($fila);
+            array_push($datos, $persona);
         }
 
         return $datos;

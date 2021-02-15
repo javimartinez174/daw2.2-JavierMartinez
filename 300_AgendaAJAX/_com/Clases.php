@@ -65,9 +65,37 @@ class Persona extends Dato
 
     private string $nombre;
     private string $apellidos;
+    private int $telefono;
     // ...
     private int $categoriaId;
     private Categoria $categoria;
+
+    public function __construct(int $id, string $nombre, int $telefono)
+    {
+        $this->setId($id);
+        $this->setNombre($nombre);
+        $this->setTelefono($telefono);
+    }
+
+    public function getNombre(): string
+    {
+        return $this->nombre;
+    }
+
+    public function setNombre(string $nombre)
+    {
+        $this->nombre = $nombre;
+    }
+
+    public function getTelefono(): int
+    {
+        return $this->telefono;
+    }
+
+    public function setTelefono(int $telefono)
+    {
+        $this->telefono = $telefono;
+    }
 
     public function obtenerCategoria(): Categoria
     {
