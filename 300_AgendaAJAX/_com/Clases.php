@@ -39,6 +39,10 @@ class Categoria extends Dato implements JsonSerializable
             "id" => $this->id,
         ];
 
+        // Esto sería lo mismo:
+        //$array["nombre"] = $this->nombre;
+        //$array["id"] = $this->id;
+        //return $array;
     }
 
     public function getNombre(): string
@@ -59,22 +63,43 @@ class Categoria extends Dato implements JsonSerializable
     }
 }
 
-class Persona extends Dato
+class Persona extends Dato implements JsonSerializable
 {
     use Identificable;
 
     private string $nombre;
     private string $apellidos;
     private int $telefono;
-    // ...
+    private int $estrella;
     private int $categoriaId;
-    private Categoria $categoria;
+    private ?Categoria $categoria;
 
-    public function __construct(int $id, string $nombre, int $telefono)
+    public function __construct(int $id, string $nombre)
     {
         $this->setId($id);
         $this->setNombre($nombre);
+    }
+    /*public function __construct(int $id, string $nombre, string $apellidos, int $telefono, int $categoriaId)
+    {
+        $this->setId($id);
+        $this->setNombre($nombre);
+        $this->setApellidos($apellidos);
         $this->setTelefono($telefono);
+        $this->setEstrella(0);
+        $this->setCategoriaId($categoriaId);
+    }*/
+
+    public function jsonSerialize()
+    {
+        return [
+            "nombre" => $this->nombre,
+            "id" => $this->id,
+        ];
+
+        // Esto sería lo mismo:
+        //$array["nombre"] = $this->nombre;
+        //$array["id"] = $this->id;
+        //return $array;
     }
 
     public function getNombre(): string
@@ -87,6 +112,16 @@ class Persona extends Dato
         $this->nombre = $nombre;
     }
 
+    public function getApellidos(): string
+    {
+        return $this->apellidos;
+    }
+
+    public function setApellidos(string $apellidos)
+    {
+        $this->apellidos = $apellidos;
+    }
+
     public function getTelefono(): int
     {
         return $this->telefono;
@@ -97,6 +132,26 @@ class Persona extends Dato
         $this->telefono = $telefono;
     }
 
+    public function getEstrella(): int
+    {
+        return $this->estrella;
+    }
+
+    public function setEstrella(int $estrella)
+    {
+        $this->estrella = $estrella;
+    }
+
+    public function getCategoriaId(): int
+    {
+        return $this->categoriaId;
+    }
+
+    public function setCategoriaId(int $categoriaId)
+    {
+        $this->categoriaId = $categoriaId;
+    }
+
     public function obtenerCategoria(): Categoria
     {
         if ($this->categoria == null) $categoria = DAO::categoriaObtenerPorId($this->categoriaId);
@@ -104,3 +159,5 @@ class Persona extends Dato
         return $categoria;
     }
 }
+
+
