@@ -74,12 +74,13 @@ class Persona extends Dato implements JsonSerializable
     private int $categoriaId;
     private ?Categoria $categoria;
 
-    public function __construct(int $id, string $nombre)
+    /*public function __construct(int $id, string $nombre)
     {
         $this->setId($id);
         $this->setNombre($nombre);
-    }
-    /*public function __construct(int $id, string $nombre, string $apellidos, int $telefono, int $categoriaId)
+    }*/
+
+    public function __construct(int $id, string $nombre, string $apellidos, int $telefono, int $categoriaId)
     {
         $this->setId($id);
         $this->setNombre($nombre);
@@ -87,11 +88,15 @@ class Persona extends Dato implements JsonSerializable
         $this->setTelefono($telefono);
         $this->setEstrella(0);
         $this->setCategoriaId($categoriaId);
-    }*/
+    }
 
     public function jsonSerialize()
     {
         return [
+            "categoriaId" => $this->categoriaId,
+            "estrella" => $this->estrella,
+            "telefono" => $this->telefono,
+            "apellidos" => $this->apellidos,
             "nombre" => $this->nombre,
             "id" => $this->id,
         ];
@@ -154,9 +159,8 @@ class Persona extends Dato implements JsonSerializable
 
     public function obtenerCategoria(): Categoria
     {
-        if ($this->categoria == null) $categoria = DAO::categoriaObtenerPorId($this->categoriaId);
+        return DAO::categoriaObtenerPorId($this->categoriaId);
 
-        return $categoria;
     }
 }
 

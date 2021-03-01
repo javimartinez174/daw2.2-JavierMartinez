@@ -25,7 +25,7 @@
 
 #personasTabla > div {
     display: table;
-    width: 250px;
+    width: 600px;
 }
 
 #personasTabla > div > div {
@@ -37,7 +37,7 @@
     display: table-cell;
     text-align: center;
     border: 1px solid silver;
-    width: 50%;
+    width: 10%;
     padding: 1px;
 }
 

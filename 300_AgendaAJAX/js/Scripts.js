@@ -11,8 +11,10 @@ var divCategoriasDatos;
 var inputCategoriaNombre;
 var divPersonasDatos;
 var inputPersonaNombre;
-//var inputPersonaApellidos;
-
+var inputPersonaApellidos;
+var inputPersonaTelefono;
+var inputPersonaEstrella;
+var inputPersonaCategoriaId;
 
 
 // ---------- VARIOS DE BASE/UTILIDADES ----------
@@ -78,6 +80,10 @@ function inicializar() {
 
     divPersonasDatos = document.getElementById("personasDatos");
     inputPersonaNombre = document.getElementById("personaNombre");
+    inputPersonaApellidos = document.getElementById("personaApellidos");
+    inputPersonaTelefono = document.getElementById("personaTelefono");
+    inputPersonaEstrella = document.getElementById("personaEstrella");
+    inputPersonaCategoriaId = document.getElementById("personaCategoriaId");
 
     document.getElementById('btnPersonaCrear').addEventListener('click', clickPersonaCrear);
 
@@ -116,8 +122,12 @@ function clickCategoriaCrear() {
 
 function clickPersonaCrear() {
     inputPersonaNombre.disabled = true;
+    inputPersonaApellidos.disabled = true;
+    inputPersonaTelefono.disabled = true;
+    inputPersonaEstrella.disabled = true;
+    inputPersonaCategoriaId.disabled = true;
 
-    llamadaAjax("PersonaCrear.php", "nombre=" + inputPersonaNombre.value,
+    llamadaAjax("PersonaCrear.php", "nombre=" + inputPersonaNombre.value+"&&apellidos="+inputPersonaApellidos.value+"&&telefono="+inputPersonaTelefono.value+"&&estrella="+parseInt(inputPersonaEstrella.value)+"&&categoriaId="+parseInt(inputPersonaCategoriaId.value),
         function(texto) {
             // Se re-crean los datos por si han modificado/normalizado algún valor en el servidor.
             var persona = JSON.parse(texto);
@@ -127,6 +137,14 @@ function clickPersonaCrear() {
 
             inputPersonaNombre.value = "";
             inputPersonaNombre.disabled = false;
+            inputPersonaApellidos.value = "";
+            inputPersonaApellidos.disabled = false;
+            inputPersonaTelefono.value = "";
+            inputPersonaTelefono.disabled = false;
+            inputPersonaEstrella.value = "";
+            inputPersonaEstrella.disabled = false;
+            inputPersonaCategoriaId.value = "";
+            inputPersonaCategoriaId.disabled = false;
 
         },
         function(texto) {
@@ -142,8 +160,12 @@ function blurPersonaModificar(input) {
     let divPersona = input.parentElement.parentElement;
     let id = extraerId(divPersona.id);
     let nombre = input.value;
+    let apellidos = input.value;
+    let telefono = input.value;
+    let estrella = input.value;
+    let categoriaId = input.value;
 
-    let Persona = { "id":  id, "nombre": nombre};
+    let Persona = { "id":  id, "nombre": nombre, "apellidos": apellidos, "telefono": telefono, "estrella": estrella, "categoriaId": categoriaId};
 
     llamadaAjax("PersonaActualizar.php", objetoAParametrosParaRequest(Persona),
         function(texto) {
@@ -306,12 +328,33 @@ function domPersonaCrearDiv(persona) {
     let nombreDiv = document.createElement("div");
     nombreDiv.appendChild(nombreInput);
 
-    /*let apellidosInput = document.createElement("input");
+    let apellidosInput = document.createElement("input");
     apellidosInput.setAttribute("type", "text");
     apellidosInput.setAttribute("value", persona.apellidos);
     apellidosInput.setAttribute("onblur", "blurPersonaModificar(this); return false;");
     let apellidosDiv = document.createElement("div");
-    apellidosDiv.appendChild(apellidosInput);*/
+    apellidosDiv.appendChild(apellidosInput);
+
+    let telefonoInput = document.createElement("input");
+    telefonoInput.setAttribute("type", "text");
+    telefonoInput.setAttribute("value", persona.telefono);
+    telefonoInput.setAttribute("onblur", "blurPersonaModificar(this); return false;");
+    let telefonoDiv = document.createElement("div");
+    telefonoDiv.appendChild(telefonoInput);
+
+    let estrellaInput = document.createElement("input");
+    estrellaInput.setAttribute("type", "text");
+    estrellaInput.setAttribute("value", persona.estrella);
+    estrellaInput.setAttribute("onblur", "blurPersonaModificar(this); return false;");
+    let estrellaDiv = document.createElement("div");
+    estrellaDiv.appendChild(estrellaInput);
+
+    let categoriaIdInput = document.createElement("input");
+    categoriaIdInput.setAttribute("type", "text");
+    categoriaIdInput.setAttribute("value", persona.categoriaId);
+    categoriaIdInput.setAttribute("onblur", "blurPersonaModificar(this); return false;");
+    let categoriaIdDiv = document.createElement("div");
+    categoriaIdDiv.appendChild(categoriaIdInput);
 
     let eliminarImg = document.createElement("img");
     eliminarImg.setAttribute("src", "img/Eliminar.png");
@@ -322,6 +365,10 @@ function domPersonaCrearDiv(persona) {
     let divPersona = document.createElement("div");
     divPersona.setAttribute("id", "Persona-" + persona.id);
     divPersona.appendChild(nombreDiv);
+    divPersona.appendChild(apellidosDiv);
+    divPersona.appendChild(telefonoDiv);
+    divPersona.appendChild(estrellaDiv);
+    divPersona.appendChild(categoriaIdDiv);
     divPersona.appendChild(eliminarDiv);
 
     return divPersona;

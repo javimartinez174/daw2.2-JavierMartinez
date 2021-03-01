@@ -159,7 +159,7 @@ class DAO
 
     private static function personaCrearDesdeRs(array $fila): Persona
     {
-        return new Persona($fila["id"], $fila["nombre"]);
+        return new Persona($fila["id"], $fila["nombre"], $fila["apellidos"], $fila["telefono"], $fila["categoriaId"]);
     }
 
     public static function personaObtenerPorId(int $id): ?Persona
@@ -190,11 +190,12 @@ class DAO
         return $datos;
     }
 
-    public static function personaCrear(string $nombre): ?Persona
+
+    public static function personaCrear(string $nombre, string $apellidos, int $telefono, int $estrella, int $categoriaId): ?Persona
     {
         $idAutogenerado = self::ejecutarInsert(
-            "INSERT INTO Persona (nombre) VALUES (?)",
-            [$nombre]
+            "INSERT INTO Persona (nombre, apellidos, telefono, estrella, categoriaId) VALUES (?,?,?,?,?)",
+            [$nombre, $apellidos, $telefono, $estrella, $categoriaId]
         );
 
         if ($idAutogenerado == null) return null;
