@@ -205,8 +205,8 @@ class DAO
     public static function personaActualizar(Persona $persona): ?Persona
     {
         $filasAfectadas = self::ejecutarUpdate(
-            "UPDATE Persona SET nombre=? WHERE id=?",
-            [$persona->getNombre(), $persona->getId()]
+            "UPDATE Persona SET nombre=?,apellidos=?,telefono=?,estrella=?,categoriaId=? WHERE id=?",
+            [$persona->getNombre(), $persona->getApellidos(), $persona->getTelefono(), $persona->getEstrella(), $persona->getCategoriaId(), $persona->getId()]
         );
 
         if ($filasAfectadas = null) return null;
