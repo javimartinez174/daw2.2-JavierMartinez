@@ -1,7 +1,7 @@
 <?php
-require_once "varios.php";
+require_once "_com/DAO.php";
 
-$conexionBD = obtenerPdoConexionBD();
+$personas = DAO::personaObtenerTodas();
 
 recogerTema();
 
@@ -12,37 +12,7 @@ if(isset($_REQUEST["todos"])){
     unset($_SESSION["soloEstrellas"]);
 }
 
-$posibleClausulaWhere = isset($_SESSION["soloEstrellas"]) ? "WHERE p.estrella=1" : "";
-$sql = "
-               SELECT
-                    p.id     AS pId,
-                    p.nombre AS pNombre,
-                    p.apellidos as pApellidos,
-                    p.telefono as pTelefono,
-                    p.estrella as pEstrella,
-                    c.id     AS cId,
-                    c.nombre AS cNombre
-                FROM
-                   persona AS p INNER JOIN categoria AS c
-                   ON p.categoriaId = c.id
-                   $posibleClausulaWhere
-                ORDER BY p.nombre
-        ";
-
-// Los campos que incluyo en el SELECT son los que luego podré leer
-// con $fila["campo"].
-
-
-$select = $conexionBD->prepare($sql);
-$select->execute([]); // Array vacío porque la consulta preparada no requiere parámetros.
-$rs = $select->fetchAll();
-
-// INTERFAZ:
-// $rs
 ?>
-
-
-
 
 <html>
 
@@ -69,24 +39,50 @@ $rs = $select->fetchAll();
         <th>Categoria</th>
     </tr>
 
-    <?php foreach ($rs as $fila) { ?>
-        <tr>
-            <td>
-                <?php
-                echo "<a href='personaFicha.php?id=$fila[pId]'>";
-                echo "$fila[pNombre]";
-                echo"</a>";
-
-                $urlImagen = $fila["pEstrella"] ? "img/estrellaRellena.png" : "img/estrellaVacia.png";
-                echo  "<a href='personaEstablecerEstadoEstrella.php?id=$fila[pId]'><img src='$urlImagen' width='16' height='16'></a>";
-                ?>
-            </td>
-            <td><?=$fila["pApellidos"]?> </td>
-            <td><?=$fila["pTelefono"]?></td>
-            <td><?=$fila["cNombre"]?></td>
-            <td><a href='personaEliminar.php?id=<?=$fila["pId"]?>'> (X)                   </a></td>
-
-        </tr>
+    <?php if(isset($_SESSION["soloEstrellas"])) {  ?>
+        <?php foreach ($personas as $persona) { ?>
+            <?php if($persona->getEstrella()==1) {  ?>
+                <tr>
+                    <td>
+                        <?php
+                        echo "<a href='personaFicha.php?id=".$persona->getId()."'>";
+                        echo $persona->getNombre();
+                        echo"</a>";
+                        if($persona->getEstrella()==1)
+                            $urlImagen = "img/estrellaRellena.png";
+                        else
+                            $urlImagen = "img/estrellaVacia.png";
+                        echo  "<a href='personaEstablecerEstadoEstrella.php?id=".$persona->getId()."'><img src='$urlImagen' width='16' height='16'></a>";
+                        ?>
+                    </td>
+                    <td><?=$persona->getApellidos()?> </td>
+                    <td><?=$persona->getTelefono()?></td>
+                    <td><?=$persona->obtenerCategoria()->getNombre()?></td>
+                    <td><a href='personaEliminar.php?id=<?=$persona->getId()?>'> (X)                   </a></td>
+                </tr>
+            <?php }?>
+        <?php } ?>
+    <?php }else{ ?>
+        <?php foreach ($personas as $persona) { ?>
+                <tr>
+                    <td>
+                        <?php
+                        echo "<a href='personaFicha.php?id=".$persona->getId()."'>";
+                        echo $persona->getNombre();
+                        echo"</a>";
+                        if($persona->getEstrella()==1)
+                            $urlImagen = "img/estrellaRellena.png";
+                        else
+                            $urlImagen = "img/estrellaVacia.png";
+                        echo  "<a href='personaEstablecerEstadoEstrella.php?id=".$persona->getId()."'><img src='$urlImagen' width='16' height='16'></a>";
+                        ?>
+                    </td>
+                    <td><?=$persona->getApellidos()?> </td>
+                    <td><?=$persona->getTelefono()?></td>
+                    <td><?=$persona->obtenerCategoria()->getNombre()?></td>
+                    <td><a href='personaEliminar.php?id=<?=$persona->getId()?>'> (X)                   </a></td>
+                </tr>
+        <?php } ?>
     <?php } ?>
 
 </table>

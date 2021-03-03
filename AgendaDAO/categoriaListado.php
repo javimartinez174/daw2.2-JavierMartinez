@@ -1,6 +1,6 @@
 <?php
-require_once "varios.php";
-require_once "dao.php";
+require_once "_com/Varios.php";
+require_once "_com/DAO.php";
 
 establecerTema();
 

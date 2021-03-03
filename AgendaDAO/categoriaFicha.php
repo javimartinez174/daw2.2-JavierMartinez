@@ -1,9 +1,8 @@
 <?php
-require_once "varios.php";
-require_once "dao.php";
+require_once "_com/Varios.php";
+require_once "_com/DAO.php";
 
 recogerTema();
-
 
 // Se recoge el parámetro "id" de la request.
 $id = (int)$_REQUEST["id"];
@@ -16,11 +15,6 @@ if ($categoria == null) {
 }else
     $categoriaNombre = $categoria->getNombre()
 
-
-
-// INTERFAZ:
-// $nuevaEntrada
-// $categoriaNombre
 ?>
 
 
