@@ -1,0 +1,44 @@
+body{
+    margin-left: 50px;
+}
+h1{
+    color: red;
+}
+h2{
+    color: dimgrey;
+}
+
+.titulo{
+    display: flex;
+    padding-left:60px;
+}
+.formulario{
+    border: 1px solid black;
+    border-radius: 25px;
+    padding: 20px;
+    width: 250px;
+    box-shadow: 5px 10px 5px darkgrey;
+}
+a{
+    text-decoration: none;
+    color: dodgerblue;
+}
+a:hover{
+    color: mediumblue;
+}
+input{
+    width: 200px;
+}
+button{
+    width: 250px;
+    background-color: lightskyblue;
+    border: 1px solid dodgerblue;
+    border-radius: 10px;
+}
+button:hover{
+    box-shadow: 5px 5px 5px #0000FF;
+    border-color: #CC0000;
+}
+
+
+

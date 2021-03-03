@@ -1,0 +1,59 @@
+body {
+    background-color: darkslategrey;
+    color: white;
+}
+
+table, td, th {
+    border: 1px solid black;
+    padding: 15px;
+}
+
+table {
+    border-collapse: collapse;
+    text-align: center;
+}
+
+button {
+    text-align: left;
+}
+
+
+a:link, a:visited, a:active {
+    text-decoration: none;
+    color: dodgerblue;
+}
+
+.listado{
+    display:flex;
+    align-items: flex-end;
+    float: left;
+    margin: 10px;
+}
+
+.pelicula{
+    border-radius: 10px;
+    width: 385px;
+    height: 470px;
+    border: 1px solid cornflowerblue;
+    float: left;
+    align-items: center;
+
+
+}
+.info{
+    align-items: center;
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+.imagen{
+    margin-left: 100px;
+
+}
+
+
+.listaPelicula{
+    margin: 10px;
+    font-size: 20px;
+}
+
